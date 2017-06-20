@@ -3,10 +3,10 @@ import React, {
   Component,
   PropTypes,
 } from 'react';
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 
 // Third party imports
-import Button from 'react-native-button';
+//import Button from 'react-native-button';
 import EntypoIcons from 'react-native-vector-icons/Entypo';
 import EvilIconsIcons from 'react-native-vector-icons/EvilIcons';
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
@@ -35,32 +35,51 @@ class StarButton extends Component {
     this.onButtonPress = this.onButtonPress.bind(this);
   }
 
-  onButtonPress() {
-    this.props.onStarButtonPress(this.props.rating);
+  onButtonPress(half) {
+    const { rating } = this.props;
+    this.props.onStarButtonPress(half ? rating-0.5 : rating);
   }
 
   render() {
     const Icon = iconSets[this.props.iconSet];
+		const buttonStyle = {
+			position: 'absolute',
+			top: 0,
+		}
 
-    return (
-      <Button
-        activeOpacity={0.20}
-        disabled={this.props.disabled}
-        onPress={this.onButtonPress}
-        containerStyle={this.props.buttonStyle}
-        style={{
-          height: this.props.starSize,
-          width: this.props.starSize,
-        }}
-      >
-        <Icon
-          name={this.props.starIconName}
-          size={this.props.starSize}
-          color={this.props.starColor}
-          style={this.props.starStyle}
-        />
-      </Button>
-    );
+		return (
+			<View>
+				<Icon
+					name={this.props.starIconName}
+					size={this.props.starSize}
+					color={this.props.starColor}
+					style={this.props.starStyle}
+				/>
+				<TouchableOpacity
+					activeOpacity={0.20}
+					disabled={this.props.disabled}
+					onPress={() => this.onButtonPress(true)}
+					containerStyle={this.props.buttonStyle}
+					style={[buttonStyle, {
+						left: 0,
+						height: this.props.starSize,
+						width: this.props.starSize/2,
+					}]}
+				/>
+				<TouchableOpacity
+					activeOpacity={0.20}
+					disabled={this.props.disabled}
+					onPress={() => this.onButtonPress(false)}
+					containerStyle={this.props.buttonStyle}
+					style={[buttonStyle, {
+						right: 0,
+						height: this.props.starSize,
+						width: this.props.starSize/2,
+					}]}
+				/>
+			</View>
+		);
+
   }
 }
 
